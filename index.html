@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevDash</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🖥️ DevDash</h1>
+    </header>
+
+    <main id="app">
+      <!-- Search & Filter -->
+      <section id="controls">
+        <input type="text" id="search-input" placeholder="Search products..." />
+        <select id="category-filter">
+          <option value="">All Categories</option>
+        </select>
+        <select id="sort-select">
+          <option value="">Sort by...</option>
+          <option value="price-asc">Price ↑</option>
+          <option value="price-desc">Price ↓</option>
+          <option value="name-asc">Name A–Z</option>
+        </select>
+      </section>
+
+      <!-- Status messages -->
+      <div id="status"></div>
+
+      <!-- List view -->
+      <section id="product-list"></section>
+
+      <!-- Detail view (hidden by default) -->
+      <section id="product-detail" class="hidden"></section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
