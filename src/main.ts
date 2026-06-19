@@ -7,8 +7,13 @@ import {
   renderProductDetail,
   showListView,
 } from "./ui";
+import { debounce, memoize } from "./utils";
 import type { Product } from "./types";
 
+// ─── Memoized fetch 
+const fetchProductCached = memoize(fetchProductById);
+
+// ─── Filter + Sort logic 
 function getFilteredProducts(
   products: Product[],
   search: string,
@@ -62,7 +67,7 @@ async function handleCardClick(id: number): Promise<void> {
     setState({ status: "loading" });
     renderStatus({ status: "loading" });
 
-    const product = await fetchProductById(id);
+    const product = await fetchProductCached(id);
 
     setState({ status: "idle" });
     renderStatus({ status: "idle" });
@@ -79,8 +84,10 @@ async function handleCardClick(id: number): Promise<void> {
 }
 
 function bindControls(): void {
+  const debouncedRefresh = debounce(refreshList, 300);
+
   document.getElementById("search-input")
-    ?.addEventListener("input", refreshList);
+    ?.addEventListener("input", debouncedRefresh);
 
   document.getElementById("category-filter")
     ?.addEventListener("change", refreshList);
