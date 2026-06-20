@@ -1,4 +1,3 @@
-
 import type { Product, ProductsResponse, Category } from "./types";
 
 export async function fetchJson<T>(url: string): Promise<T> {
@@ -27,6 +26,28 @@ export async function fetchProductById(id: number): Promise<Product> {
 
 export async function fetchCategories(): Promise<Category[]> {
   return fetchJson<Category[]>(`${BASE_URL}/products/categories`);
+}
+
+export interface ProductDetailData {
+  product: Product;
+  related: Product[];
+}
+
+export async function fetchProductDetail(
+  id: number,
+  category: string
+): Promise<ProductDetailData> {
+  const [product, categoryData] = await Promise.all([
+    fetchJson<Product>(`${BASE_URL}/products/${id}`),
+    fetchJson<ProductsResponse>(
+      `${BASE_URL}/products/category/${category}?limit=5`
+    ),
+  ]);
+
+  // Lọc bỏ chính sản phẩm đó khỏi danh sách related
+  const related = categoryData.products.filter((p) => p.id !== id);
+
+  return { product, related };
 }
 
 export interface DashboardData {

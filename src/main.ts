@@ -1,4 +1,4 @@
-import { fetchDashboardData, fetchProductById } from "./api";
+import { fetchDashboardData, fetchProductDetail } from "./api";
 import { setState, getAllProducts, setAllProducts } from "./state";
 import {
   renderStatus,
@@ -10,10 +10,11 @@ import {
 import { debounce, memoize } from "./utils";
 import type { Product } from "./types";
 
-// ─── Memoized fetch 
-const fetchProductCached = memoize(fetchProductById);
+const fetchDetailCached = memoize(
+  ({ id, category }: { id: number; category: string }) =>
+    fetchProductDetail(id, category)
+);
 
-// ─── Filter + Sort logic 
 function getFilteredProducts(
   products: Product[],
   search: string,
@@ -63,19 +64,30 @@ function refreshList(): void {
 }
 
 async function handleCardClick(id: number): Promise<void> {
+  // Tìm product trong state để lấy category
+  const product = getAllProducts().find((p) => p.id === id);
+  if (!product) return;
+
   try {
     setState({ status: "loading" });
     renderStatus({ status: "loading" });
 
-    const product = await fetchProductCached(id);
+    const detailData = await fetchDetailCached({
+      id,
+      category: product.category,
+    });
 
     setState({ status: "idle" });
     renderStatus({ status: "idle" });
 
-    renderProductDetail(product, () => {
-      showListView();
-      refreshList();
-    });
+    renderProductDetail(
+      detailData,
+      () => {
+        showListView();
+        refreshList();
+      },
+      handleCardClick 
+    );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     setState({ status: "error", message });
@@ -96,13 +108,11 @@ function bindControls(): void {
     ?.addEventListener("change", refreshList);
 }
 
-//Entry point 
 async function init(): Promise<void> {
   setState({ status: "loading" });
   renderStatus({ status: "loading" });
 
   try {
-    // Promise.all
     const { products, categories } = await fetchDashboardData();
 
     setAllProducts(products);

@@ -233,3 +233,77 @@ h1 {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
 }
+
+/* ─── Detail layout ──────────────────────────────────────────────────── */
+.detail-content {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.detail-content img {
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 1rem;
+  flex-shrink: 0;
+}
+
+.detail-info {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail-meta {
+  color: #6b7280;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.detail-desc {
+  color: #374151;
+  line-height: 1.6;
+}
+
+.detail-price {
+  font-weight: 700;
+  color: #16a34a;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+}
+
+.detail-discount {
+  font-size: 0.85rem;
+  color: #dc2626;
+  background: #fef2f2;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* ─── Related products ───────────────────────────────────────────────── */
+.related h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #111;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.related-card {
+  font-size: 0.85rem;
+}
+
+.related-card img {
+  height: 100px;
+}
