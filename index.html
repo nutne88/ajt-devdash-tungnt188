@@ -1,40 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DevDash</title>
+    <title>DevDash — Premium Product Console</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <header>
-      <h1>🖥️ DevDash</h1>
-    </header>
+    <div class="dashboard-container">
+      <header class="app-header">
+        <div class="header-logo">
+          <h1>DevDash</h1>
+        </div>
+      </header>
 
-    <main id="app">
-      <!-- Search & Filter -->
-      <section id="controls">
-        <input type="text" id="search-input" placeholder="Search products..." />
-        <select id="category-filter">
-          <option value="">All Categories</option>
-        </select>
-        <select id="sort-select">
-          <option value="">Sort by...</option>
-          <option value="price-asc">Price ↑</option>
-          <option value="price-desc">Price ↓</option>
-          <option value="name-asc">Name A–Z</option>
-        </select>
-      </section>
+      <main id="app">
+        <section id="controls" class="controls-console">
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search by title, description..."
+            />
+          </div>
 
-      <!-- Status messages -->
-      <div id="status"></div>
+          <div class="select-wrapper">
+            <select id="category-filter">
+              <option value="">All Categories</option>
+            </select>
+          </div>
 
-      <!-- List view -->
-      <section id="product-list"></section>
+          <div class="select-wrapper">
+            <select id="sort-select">
+              <option value="">Sort by...</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name-asc">Name: A to Z</option>
+            </select>
+          </div>
+        </section>
 
-      <!-- Detail view (hidden by default) -->
-      <section id="product-detail" class="hidden"></section>
-    </main>
+        <div id="status"></div>
+
+        <section id="product-list" class="grid-layout"></section>
+
+        <section id="product-detail" class="detail-panel hidden"></section>
+      </main>
+    </div>
 
     <script type="module" src="/src/main.ts"></script>
   </body>
