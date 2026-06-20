@@ -1,22 +1,20 @@
 import type { Product, ProductsResponse, Category } from "./types";
+import { TTLCache } from "./utils"; 
+
+const detailCache = new TTLCache<{ product: Product; related: Product[] }>(5 * 60 * 1000);
 
 export async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url);
-
   if (!response.ok) {
     throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
   }
-
-  const data = (await response.json()) as T;
-  return data;
+  return response.json() as Promise<T>; 
 }
 
 const BASE_URL = "https://dummyjson.com";
 
 export async function fetchProducts(): Promise<Product[]> {
-  const data = await fetchJson<ProductsResponse>(
-    `${BASE_URL}/products?limit=100`
-  );
+  const data = await fetchJson<ProductsResponse>(`${BASE_URL}/products?limit=100`);
   return data.products;
 }
 
@@ -33,21 +31,21 @@ export interface ProductDetailData {
   related: Product[];
 }
 
-export async function fetchProductDetail(
-  id: number,
-  category: string
-): Promise<ProductDetailData> {
+export async function fetchProductDetail(id: number, category: string): Promise<ProductDetailData> {
+  const cacheKey = `${id}-${category}`;
+  const cached = detailCache.get(cacheKey);
+  if (cached) return cached;
+
   const [product, categoryData] = await Promise.all([
-    fetchJson<Product>(`${BASE_URL}/products/${id}`),
-    fetchJson<ProductsResponse>(
-      `${BASE_URL}/products/category/${category}?limit=5`
-    ),
+    fetchProductById(id),
+    fetchJson<ProductsResponse>(`${BASE_URL}/products/category/${category}?limit=5`),
   ]);
 
-  // Lọc bỏ chính sản phẩm đó khỏi danh sách related
   const related = categoryData.products.filter((p) => p.id !== id);
+  const result = { product, related };
 
-  return { product, related };
+  detailCache.set(cacheKey, result);
+  return result;
 }
 
 export interface DashboardData {
@@ -56,10 +54,6 @@ export interface DashboardData {
 }
 
 export async function fetchDashboardData(): Promise<DashboardData> {
-  const [products, categories] = await Promise.all([
-    fetchProducts(),
-    fetchCategories(),
-  ]);
-
+  const [products, categories] = await Promise.all([fetchProducts(), fetchCategories()]);
   return { products, categories };
 }

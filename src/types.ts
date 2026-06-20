@@ -1,4 +1,3 @@
-
 export interface Product {
   id: number;
   title: string;
@@ -27,9 +26,20 @@ export interface Category {
 }
 
 export type AppState =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "success"; data: Product[]; categories: Category[] }
-  | { status: "error"; message: string };
+  | { readonly status: "idle" }
+  | { readonly status: "loading" }
+  | { readonly status: "success"; readonly data: Product[]; readonly categories: Category[] }
+  | { readonly status: "error"; readonly message: string };
+
 export type ProductUpdate = Partial<Pick<Product, "title" | "price" | "stock">>;
+
+export type ProductCard = Pick<Product, "id" | "title" | "price" | "category" | "thumbnail" | "rating">;
+
+export type ProductDraft = Omit<Product, "id">;
+
 export type CategoryMap = Record<string, string>;
+
+export interface CacheEntry<T> {
+  value: T;
+  timestamp: number;
+}

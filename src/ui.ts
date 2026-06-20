@@ -1,4 +1,4 @@
-import type { Product, Category, AppState } from "./types";
+import type { Product, Category, AppState, ProductCard } from "./types";
 import type { ProductDetailData } from "./api";
 
 function getElement<T extends HTMLElement>(id: string): T {
@@ -42,9 +42,21 @@ export function renderCategoryOptions(categories: Category[]): void {
   });
 }
 
+function renderStars(rating: number): string {
+  const filled = Math.round(rating);
+  return "★".repeat(filled) + "☆".repeat(5 - filled);
+}
+
+function formatCategory(category: string): string {
+  return category
+    .split(/[-_\s]/)
+    .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 export function renderProductList(
-  products: Product[],
-  onCardClick: (id: number) => void
+  products: ProductCard[],
+  onCardClick: (id: number) => void,
 ): void {
   const list = getElement<HTMLElement>("product-list");
 
@@ -58,12 +70,19 @@ export function renderProductList(
       ({ id, title, price, category, thumbnail, rating }) => `
       <article class="card" data-id="${id}">
         <img src="${thumbnail}" alt="${title}" loading="lazy" />
-        <h3>${title}</h3>
-        <p class="price">$${price.toFixed(2)}</p>
-        <p class="category">${category}</p>
-        <p class="rating">⭐ ${rating}</p>
+        <div class="card-body">
+          <div class="category-badge">${formatCategory(category)}</div>
+          <h3>${title}</h3>
+        </div>
+        <div class="card-footer-info">
+          <p class="price">$${price.toFixed(2)}</p>
+          <div class="rating">
+            <span class="stars">${renderStars(rating)}</span>
+            <span class="rating-score">${rating.toFixed(1)}</span>
+          </div>
+        </div>
       </article>
-    `
+    `,
     )
     .join("");
 
@@ -78,7 +97,7 @@ export function renderProductList(
 export function renderProductDetail(
   { product, related }: ProductDetailData,
   onBack: () => void,
-  onRelatedClick: (id: number) => void
+  onRelatedClick: (id: number) => void,
 ): void {
   const listSection = getElement<HTMLElement>("product-list");
   const controls = getElement<HTMLElement>("controls");
@@ -113,7 +132,7 @@ export function renderProductDetail(
               <h3>${title}</h3>
               <p class="price">$${price.toFixed(2)}</p>
             </article>
-          `
+          `,
             )
             .join("")}
         </div>
