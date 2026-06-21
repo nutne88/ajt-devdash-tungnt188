@@ -106,7 +106,7 @@ ajt-devdash-tungnt188/
 ## Links
 
 - **GitHub Repo:** `https://github.com/nutne88/ajt-devdash-tungnt188/`
-- **Live Demo:** `https://nutne88.github.io/ajt-devdash-tungnt188/`
+- **Live Demo:** `https://ajt-devdash-tungnt188-b976.vercel.app/`
 
 ---
 
