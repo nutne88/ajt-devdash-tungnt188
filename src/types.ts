@@ -6,7 +6,7 @@ export interface Product {
   discountPercentage: number;
   rating: number;
   stock: number;
-  brand: string;
+  brand?: string;
   category: string;
   thumbnail: string;
   images: string[];
@@ -28,12 +28,19 @@ export interface Category {
 export type AppState =
   | { readonly status: "idle" }
   | { readonly status: "loading" }
-  | { readonly status: "success"; readonly data: Product[]; readonly categories: Category[] }
+  | {
+      readonly status: "success";
+      readonly data: Product[];
+      readonly categories: Category[];
+    }
   | { readonly status: "error"; readonly message: string };
 
 export type ProductUpdate = Partial<Pick<Product, "title" | "price" | "stock">>;
 
-export type ProductCard = Pick<Product, "id" | "title" | "price" | "category" | "thumbnail" | "rating">;
+export type ProductCard = Pick<
+  Product,
+  "id" | "title" | "price" | "category" | "thumbnail" | "rating"
+>;
 
 export type ProductDraft = Omit<Product, "id">;
 

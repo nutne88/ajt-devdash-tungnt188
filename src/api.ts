@@ -1,7 +1,7 @@
 import type { Product, ProductsResponse, Category } from "./types";
-import { TTLCache } from "./utils"; 
+import { createTTLCache  } from "./utils"; 
 
-const detailCache = new TTLCache<{ product: Product; related: Product[] }>(5 * 60 * 1000);
+const detailCache = createTTLCache<{ product: Product; related: Product[] }>(5 * 60 * 1000);
 
 export async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url);

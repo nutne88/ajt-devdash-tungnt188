@@ -146,7 +146,7 @@ export function renderProductDetail(
       <img src="${thumbnail}" alt="${title}" />
       <div class="detail-info">
         <h2>${title}</h2>
-        <p class="detail-meta">${brand} · ${category}</p>
+        <p class="detail-meta">${brand ? `${brand} · ` : ""}${formatCategory(category)}</p>
         <p class="detail-desc">${description}</p>
         <p>
           <strong>Price:</strong>
