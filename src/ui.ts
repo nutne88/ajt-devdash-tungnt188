@@ -1,4 +1,4 @@
-import type { Product, Category, AppState, ProductCard } from "./types";
+import type { Category, AppState, ProductCard } from "./types";
 import type { ProductDetailData } from "./api";
 
 function getElement<T extends HTMLElement>(id: string): T {
